@@ -2,10 +2,13 @@ package com.eritlab.whatsappcone.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleRegistry
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.eritlab.whatsappcone.R
 import com.eritlab.whatsappcone.adapter.TabLayoutViewPagerAdapter
 import com.eritlab.whatsappcone.databinding.ActivityMainBinding
@@ -25,20 +28,34 @@ class MainActivity : AppCompatActivity() {
         binding.tabContentViewPager.adapter =
             TabLayoutViewPagerAdapter(supportFragmentManager, lifecycle)
         TabLayoutMediator(binding.tabLayout, binding.tabContentViewPager) { tab, position ->
-            tab.text = when (position) {
+            when (position) {
                 0 -> {
-                    "CHATS"
+                    tab.icon =
+                        ContextCompat.getDrawable(this, R.drawable.ic_baseline_photo_camera_24)
                 }
                 1 -> {
-                    "STATUS"
+                    tab.text = "CHATS"
+                }
+                2 -> {
+                    tab.text = "STATUS"
                 }
                 3 -> {
-                    "CALLS"
+                    tab.text = "CALLS"
                 }
                 else -> {
-                    "CHATS"
+                    tab.text = "CHATS"
                 }
             }
+
+
         }.attach()
+
+
+        //resize camera tab
+        val layout = (binding.tabLayout[0] as LinearLayout).getChildAt(0)
+        val layoutParams = layout.layoutParams as LinearLayout.LayoutParams
+        layoutParams.weight = 0.5F
+        layout.layoutParams = layoutParams
+
     }
 }
