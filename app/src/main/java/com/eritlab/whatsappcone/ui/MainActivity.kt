@@ -1,10 +1,21 @@
 package com.eritlab.whatsappcone.ui
 
+import android.animation.Animator
+import android.animation.Animator.AnimatorListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.TypedValue
+import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.Animation.AnimationListener
 import android.widget.LinearLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewGroupCompat
 import androidx.core.view.get
+import androidx.core.view.marginTop
+import androidx.core.view.setMargins
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleRegistry
@@ -12,6 +23,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.eritlab.whatsappcone.R
 import com.eritlab.whatsappcone.adapter.TabLayoutViewPagerAdapter
 import com.eritlab.whatsappcone.databinding.ActivityMainBinding
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
@@ -22,6 +35,51 @@ class MainActivity : AppCompatActivity() {
         window?.statusBarColor = ContextCompat.getColor(this, R.color.default_color)
         setContentView(binding.root)
         setTabLayoutItem()
+
+
+//animate to hide top bar
+//        val height = TypedValue().apply {
+//            this@MainActivity.theme.resolveAttribute(
+//                android.R.attr.actionBarSize,
+//                TypedValue(),
+//                true
+//            )
+//        }
+
+        binding.tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab?.position == 0) {
+                    binding.tabLayout.animate()
+                        .translationY(binding.tabLayout.height.toFloat() * -1)
+                        .withStartAction {
+                            binding.appbar.animate()
+                                .translationY(binding.appbar.height.toFloat() * -1)
+                                .start()
+                          //  val params = binding.tabContentViewPager.layoutParams as LayoutParams
+                          //  params.setMargins(0, 0, 0, 0)
+                           // binding.tabContentViewPager.layoutParams = params
+                        }
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                if (tab?.position == 0) {
+                    binding.appbar.animate().translationY(0f)
+                        .withStartAction {
+                            binding.tabLayout.animate().translationY(0f).start()
+                            val params = binding.tabContentViewPager.layoutParams as LayoutParams
+                           // params.setMargins(0, height.data, 0, 0)
+                          //  binding.tabContentViewPager.layoutParams = params
+                        }
+                        .start()
+                }
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+
+        })
     }
 
     private fun setTabLayoutItem() {
@@ -56,6 +114,9 @@ class MainActivity : AppCompatActivity() {
         val layoutParams = layout.layoutParams as LinearLayout.LayoutParams
         layoutParams.weight = 0.5F
         layout.layoutParams = layoutParams
+
+//preselected tab item
+        binding.tabLayout.getTabAt(1)?.select()
 
     }
 }
