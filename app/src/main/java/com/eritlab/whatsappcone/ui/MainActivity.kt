@@ -4,7 +4,11 @@ import android.animation.Animator
 import android.animation.Animator.AnimatorListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
+import android.text.method.ReplacementTransformationMethod
+import android.util.Log
 import android.util.TypedValue
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
@@ -28,24 +32,29 @@ import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
+    private var currentTab = 1;
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (savedInstanceState!=null) {
+            currentTab = savedInstanceState.getInt("currentTab")
+        }
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         window?.statusBarColor = ContextCompat.getColor(this, R.color.default_color)
         setContentView(binding.root)
+
         setTabLayoutItem()
 
 
 //animate to hide top bar
-//        val height = TypedValue().apply {
-//            this@MainActivity.theme.resolveAttribute(
-//                android.R.attr.actionBarSize,
-//                TypedValue(),
-//                true
-//            )
-//        }
-
+        val typedValue = TypedValue().apply {
+            this@MainActivity.theme.resolveAttribute(
+                android.R.attr.actionBarSize,
+                this,
+                true
+            )
+        }
+        val height = TypedValue.complexToDimension(typedValue.data, resources.displayMetrics)
         binding.tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 if (tab?.position == 0) {
@@ -54,22 +63,30 @@ class MainActivity : AppCompatActivity() {
                         .withStartAction {
                             binding.appbar.animate()
                                 .translationY(binding.appbar.height.toFloat() * -1)
+                                .withEndAction {
+                                    binding.tabLayout.visibility = View.GONE
+                                    binding.appbar.visibility = View.GONE
+                                }
                                 .start()
-                          //  val params = binding.tabContentViewPager.layoutParams as LayoutParams
-                          //  params.setMargins(0, 0, 0, 0)
-                           // binding.tabContentViewPager.layoutParams = params
+                            val params = binding.tabContentViewPager.layoutParams as LayoutParams
+                            params.setMargins(0, height.toInt() * -1, 0, 0)
+                            binding.tabContentViewPager.layoutParams = params
                         }
+
                 }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
+                val params = binding.tabContentViewPager.layoutParams as LayoutParams
                 if (tab?.position == 0) {
                     binding.appbar.animate().translationY(0f)
                         .withStartAction {
-                            binding.tabLayout.animate().translationY(0f).start()
-                            val params = binding.tabContentViewPager.layoutParams as LayoutParams
-                           // params.setMargins(0, height.data, 0, 0)
-                          //  binding.tabContentViewPager.layoutParams = params
+                            binding.tabLayout.visibility = View.VISIBLE
+                            binding.appbar.visibility = View.VISIBLE
+                            binding.tabLayout.animate().translationY(0f)
+                                .start()
+                            params.setMargins(0, height.toInt(), 0, 0)
+                            binding.tabContentViewPager.layoutParams = params
                         }
                         .start()
                 }
@@ -80,6 +97,14 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+
+
+    }
+
+    //save current tab
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("currentTab", 0)//binding.tabContentViewPager.currentItem)
     }
 
     private fun setTabLayoutItem() {
@@ -109,14 +134,16 @@ class MainActivity : AppCompatActivity() {
         }.attach()
 
 
-        //resize camera tab
+//resize camera tab
         val layout = (binding.tabLayout[0] as LinearLayout).getChildAt(0)
         val layoutParams = layout.layoutParams as LinearLayout.LayoutParams
         layoutParams.weight = 0.5F
         layout.layoutParams = layoutParams
 
 //preselected tab item
-        binding.tabLayout.getTabAt(1)?.select()
+        binding.tabLayout.getTabAt(currentTab)?.select()
 
     }
+
+
 }
