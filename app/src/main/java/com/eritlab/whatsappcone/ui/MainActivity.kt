@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     private var currentTab = 1;
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (savedInstanceState!=null) {
+        if (savedInstanceState != null) {
             currentTab = savedInstanceState.getInt("currentTab")
         }
         super.onCreate(savedInstanceState)
