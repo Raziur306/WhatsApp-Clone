@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "546273004556",
+    "project_id": "whatsapp-cone-f01a4",
+    "storage_bucket": "whatsapp-cone-f01a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546273004556:android:4783211062396d4955f229",
+        "android_client_info": {
+          "package_name": "com.eritlab.whatsappcone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "546273004556-iin5859g34apt5sdeavlpuitjrkti5o2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA75Qx7bShjeGGq_RUXUDFsHRu7E1rhvVY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "546273004556-iin5859g34apt5sdeavlpuitjrkti5o2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
