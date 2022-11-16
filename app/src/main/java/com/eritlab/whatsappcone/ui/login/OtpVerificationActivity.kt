@@ -156,7 +156,7 @@ class OtpVerificationActivity : AppCompatActivity() {
                             startActivity(
                                 Intent(
                                     this@OtpVerificationActivity,
-                                    MainActivity::class.java
+                                    LoginProfileActivity::class.java
                                 )
                             )
                             finish()
