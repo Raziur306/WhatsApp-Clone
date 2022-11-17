@@ -98,20 +98,20 @@ class OtpVerificationActivity : AppCompatActivity() {
             .build()
 
 
-//        timer = object : CountDownTimer(timeInterval, 1000) {
-//            override fun onTick(millisUntilFinished: Long) {
-//                val diffSeconds = millisUntilFinished / 1000;
-//                binding.resendSMS.text = diffSeconds.toString() + "s"
-//            }
-//
-//            override fun onFinish() {
-//                binding.resendSMS.apply {
-//                    text = "Resend"
-//                    isClickable = true
-//                }
-//            }
-//
-//        }
+        timer = object : CountDownTimer(timeInterval, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val diffSeconds = millisUntilFinished / 1000;
+                binding.resendSMS.text = diffSeconds.toString() + "s"
+            }
+
+            override fun onFinish() {
+                binding.resendSMS.apply {
+                    text = "Resend"
+                    isClickable = true
+                }
+            }
+
+        }
 
         sendOTP(option)
         //resend otp
