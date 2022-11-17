@@ -5,21 +5,37 @@ import android.os.Bundle
 import com.eritlab.whatsappcone.databinding.ActivityLoginProfileBinding
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.EmojiPopup
+import com.vanniktech.emoji.google.GoogleEmojiProvider
 
 class LoginProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginProfileBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        EmojiManager.install(GoogleEmojiProvider())
         binding = ActivityLoginProfileBinding.inflate(layoutInflater)
-
+        val emojiPopup = EmojiPopup(binding.root, binding.emojiEditText)
         binding.emojiPicker.setOnClickListener {
-           // val emojiPopup = EmojiPopup(binding.root, binding.userName)
-            //emojiPopup.toggle() // Toggles visibility of the Popup.
-            //    emojiPopup.dismiss() // Dismisses the Popup.
-            //   emojiPopup.isShowing() // Returns true when Popup is showing.
+            emojiPopup.toggle()
+        }
+        setContentView(binding.root)
+        binding.profileImagePicker.setOnClickListener {
+            checkPermission()
+        }
+
+        binding.nextBtn.setOnClickListener {
+            val name = binding.emojiEditText.text
+            if (name!!.isNotEmpty()) {
+                val hash = HashMap<String, Any?>()
+                hash["name"] = name
+            } else {
+                binding.emojiEditText.error = "Can't be empty."
+            }
         }
 
 
-        setContentView(binding.root)
+    }
+
+    private fun checkPermission() {
+
     }
 }

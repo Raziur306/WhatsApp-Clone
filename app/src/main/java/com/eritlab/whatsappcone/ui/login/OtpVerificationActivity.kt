@@ -165,7 +165,7 @@ class OtpVerificationActivity : AppCompatActivity() {
                                 this@OtpVerificationActivity,
                                 "Something went wrong",
                                 Toast.LENGTH_SHORT
-                            )
+                            ).show()
                         }
                     }
                 binding.progressBar.visibility = View.GONE
