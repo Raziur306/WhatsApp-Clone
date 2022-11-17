@@ -9,6 +9,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import com.eritlab.whatsappcone.databinding.ActivityOtpVerificationBinding
+import com.eritlab.whatsappcone.sharedpref.EncrypterSharedPref
 import com.eritlab.whatsappcone.ui.MainActivity
 import com.google.android.gms.common.internal.Objects.ToStringHelper
 import com.google.firebase.FirebaseException
@@ -28,6 +29,7 @@ class OtpVerificationActivity : AppCompatActivity() {
     private lateinit var firebaseAUth: FirebaseAuth
     private lateinit var verificationID: String
     private lateinit var firestore: FirebaseFirestore
+    private lateinit var sharedPref: EncrypterSharedPref
     private lateinit var binding: ActivityOtpVerificationBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +40,7 @@ class OtpVerificationActivity : AppCompatActivity() {
         binding.phoneNumberView.text = phoneNumber
         firebaseAUth = Firebase.auth
         firestore = FirebaseFirestore.getInstance()
+        sharedPref = applicationContext as EncrypterSharedPref
 
         binding.verifyBtn.setOnClickListener {
             window.setFlags(
@@ -153,6 +156,7 @@ class OtpVerificationActivity : AppCompatActivity() {
                 firestore.collection("users").document(firebaseAUth.uid.toString()).set(hashMap)
                     .addOnCompleteListener {
                         if (task.isSuccessful) {
+                            sharedPref.saveUserUid(firebaseAUth.uid.toString())
                             startActivity(
                                 Intent(
                                     this@OtpVerificationActivity,
