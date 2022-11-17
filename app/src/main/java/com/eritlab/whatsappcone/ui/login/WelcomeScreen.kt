@@ -15,7 +15,7 @@ class WelcomeScreen : AppCompatActivity() {
 
 
         binding.acceptBtn.setOnClickListener {
-            startActivity(Intent(this, LoginProfileActivity::class.java))
+            startActivity(Intent(this, PhoneRegisterActivity::class.java))
             finish()
         }
 

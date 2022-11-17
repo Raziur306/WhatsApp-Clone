@@ -12,11 +12,15 @@ import android.os.Build.VERSION.SDK_INT
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.documentfile.provider.DocumentFile
 import com.bumptech.glide.Glide
 import com.eritlab.whatsappcone.databinding.ActivityLoginProfileBinding
 import com.eritlab.whatsappcone.ui.MainActivity
@@ -27,6 +31,7 @@ import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.EmojiPopup
 import com.vanniktech.emoji.google.GoogleEmojiProvider
 import kotlinx.coroutines.MainScope
+import java.io.File
 import java.net.URI
 
 class LoginProfileActivity : AppCompatActivity() {
@@ -51,10 +56,17 @@ class LoginProfileActivity : AppCompatActivity() {
         }
 
         binding.nextBtn.setOnClickListener {
+            binding.imageProgressBar.visibility = View.VISIBLE
+            window?.setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            )
+
+
             val name = binding.emojiEditText.text
 
             if (name!!.isNotEmpty()) {
-                hashMap["name"] = name
+                hashMap["name"] = name.toString()
             } else {
                 binding.emojiEditText.error = "Can't be empty."
             }
@@ -117,13 +129,21 @@ class LoginProfileActivity : AppCompatActivity() {
     private fun uploadImage() {
         val storageRef = FirebaseStorage.getInstance().reference
         val imageRef =
-            storageRef.child(System.currentTimeMillis().toString() + "" + getImageExtension())
-        storageRef.putFile(profileImageUri!!).addOnSuccessListener {
-            storageRef.downloadUrl.addOnSuccessListener {
+            storageRef.child(
+                "profile_images/" + System.currentTimeMillis()
+                    .toString() + "." + getImageExtension()
+            )
+        imageRef.putFile(profileImageUri!!).addOnSuccessListener {
+            imageRef.downloadUrl.addOnSuccessListener {
                 hashMap["profile_url"] = it
+                Log.d("Uploaded Image Uri", it.toString())
                 fireStoreData()
             }
         }.addOnFailureListener {
+            window?.clearFlags(
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            )
+            binding.imageProgressBar.visibility = View.GONE
             Toast.makeText(this@LoginProfileActivity, it.message.toString(), Toast.LENGTH_SHORT)
                 .show()
         }
@@ -141,6 +161,10 @@ class LoginProfileActivity : AppCompatActivity() {
         firestore.collection("users").document(FirebaseAuth.getInstance().uid.toString())
             .update(hashMap).addOnCompleteListener {
                 if (it.isSuccessful) {
+                    window?.clearFlags(
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                    )
+                    binding.imageProgressBar.visibility = View.GONE
                     startActivity(Intent(this@LoginProfileActivity, MainActivity::class.java))
                     finish()
                 }
@@ -150,6 +174,10 @@ class LoginProfileActivity : AppCompatActivity() {
                     "Something went wrong",
                     Toast.LENGTH_SHORT
                 ).show()
+                window?.clearFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                )
+                binding.imageProgressBar.visibility = View.GONE
             }
     }
 }
