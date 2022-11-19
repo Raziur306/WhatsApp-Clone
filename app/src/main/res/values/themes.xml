@@ -12,6 +12,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <item name="actionOverflowButtonStyle">@style/MyOverflowButtonStyle</item>
     </style>
 
 
@@ -21,14 +23,22 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="Theme.WhatsAppCone.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+
+    <!--     popup menu-->
+    <style name="MyOverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/white</item>
     </style>
 
-    <style name="Theme.WhatsAppCone.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.WhatsAppCone.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!--    <style name="Theme.WhatsAppCone.NoActionBar">-->
+    <!--        <item name="windowActionBar">false</item>-->
+    <!--        <item name="windowNoTitle">true</item>-->
+    <!--    </style>-->
+
+    <!--    <style name="Theme.WhatsAppCone.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
+
+    <!--    <style name="Theme.WhatsAppCone.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />-->
 
 
 </resources>

@@ -1,19 +1,24 @@
 package com.eritlab.whatsappcone.ui
 
 import android.Manifest.permission.READ_CONTACTS
+import android.animation.ObjectAnimator
 import android.content.pm.PackageManager
 import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
+import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.view.menu.ActionMenuItemView
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.eritlab.whatsappcone.R
 import com.eritlab.whatsappcone.adapter.ContactRecyclerAdapter
 import com.eritlab.whatsappcone.databinding.ActivityFindContactBinding
 import com.eritlab.whatsappcone.model.ContactModel
@@ -37,6 +42,7 @@ class FindContactActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<C
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFindContactBinding.inflate(layoutInflater)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.default_color)
         setContentView(binding.root)
 
 
@@ -48,6 +54,46 @@ class FindContactActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<C
 
         //check and launch for permission
         updateOrRequestPermission()
+
+        //searchbar
+
+//        val searchView =
+//            binding.searchToolbar.searchToolbarMenu.findViewById<ActionMenuItemView>(R.id.action_filter_search)
+
+
+        // searchView.onActionViewExpanded()
+        //appbar
+        binding.topAppBar.setOnMenuItemClickListener { menu ->
+            when (menu.itemId) {
+                //R.id.action_search -> {
+                // binding.searchToolbar.root.visibility = View.VISIBLE
+//                    ObjectAnimator.ofFloat(binding.searchToolbar, "translationX", 100f).apply {
+//
+//                        duration = 2000
+//                        start()
+//                    }
+                //    true
+                //  }
+                R.id.inviteFriend -> {
+                    true
+                }
+                R.id.contacts -> {
+                    true
+                }
+                R.id.refresh -> {
+                    binding.topAppBar.menu.findItem(R.id.contactProgressBar).isVisible = true
+                    LoaderManager.getInstance(this).initLoader(0, null, this)
+                    true
+                }
+                R.id.help -> {
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+
     }
 
 
@@ -142,6 +188,7 @@ class FindContactActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<C
                 data?.close()
             }
         }
+        binding.topAppBar.subtitle = contactList.size.toString() + " contacts"
 
         if (contactList.size != 0) {
             binding.contactRecyclerView.layoutManager = LinearLayoutManager(this)
