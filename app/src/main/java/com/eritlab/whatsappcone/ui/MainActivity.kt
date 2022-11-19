@@ -2,6 +2,7 @@ package com.eritlab.whatsappcone.ui
 
 import android.animation.Animator
 import android.animation.Animator.AnimatorListener
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -26,6 +27,7 @@ import androidx.lifecycle.LifecycleRegistry
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eritlab.whatsappcone.R
 import com.eritlab.whatsappcone.adapter.TabLayoutViewPagerAdapter
+import com.eritlab.whatsappcone.databinding.ActivityFindContactBinding
 import com.eritlab.whatsappcone.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
@@ -74,6 +76,15 @@ class MainActivity : AppCompatActivity() {
                         }
 
                 }
+                if (tab?.position == 1) {
+                    binding.floatingActionButton.setImageResource(R.drawable.ic_baseline_message_24)
+
+                } else if (
+                    tab?.position == 3
+                ) {
+                    binding.floatingActionButton.setImageResource(R.drawable.ic_baseline_add_ic_call_24)
+
+                }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -98,7 +109,22 @@ class MainActivity : AppCompatActivity() {
 
         })
 
+//Floating button click
+        binding.floatingActionButton.setOnClickListener {
+            val tabPosition = binding.tabLayout.selectedTabPosition
+            if (tabPosition == 1) {
+                startActivity(
+                    Intent(
+                        this@MainActivity,
+                        FindContactActivity::class.java
+                    )
+                )
+            } else if (tabPosition == 2) {
 
+            } else if (tabPosition == 3) {
+
+            }
+        }
     }
 
     //save current tab

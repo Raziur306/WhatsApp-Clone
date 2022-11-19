@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:name=".sharedpref.EncrypterSharedPref"
@@ -21,6 +22,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WhatsAppCone"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.FindContactActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".ui.login.WelcomeScreen"
             android:exported="false">
