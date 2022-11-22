@@ -151,6 +151,7 @@ class OtpVerificationActivity : AppCompatActivity() {
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         val hashMap = HashMap<String, Any?>()
         hashMap["phone"] = phoneNumber
+        hashMap["userId"] = firebaseAUth.uid
         firebaseAUth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
                 firestore.collection("users").document(firebaseAUth.uid.toString()).set(hashMap)

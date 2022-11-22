@@ -11,7 +11,6 @@ class ContactRecyclerAdapter(
 ) : RecyclerView.Adapter<ContactRecyclerAdapter.ViewHolder>() {
     class ViewHolder(val binding: RecyclerContactItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
